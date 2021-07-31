@@ -6,22 +6,22 @@
 
 3. Run the command `./webserver.py`. The server is now ready. 
 
-4. To see it functioning, use a tool like [Postman](https://www.postman.com/), and send a POST request with the body of the request like:
+4. To see it functioning, use a tool like [Postman](https://www.postman.com/), and send a POST request with the body of the request (raw option in [Postman](https://www.postman.com/)) like:
 
 ```json
-{"options": "14 1 14 1 14 1 14 1 14"}
+{"pw_settings": "14 1 14 1 14 1 14 1 14"}
 ```
 The arguments are as follows:
 
 - length
-- lowercasemin
-- lowercasemax
-- uppercasemin
-- uppercasemax
-- numbersmin
-- numbersmax
-- specialmin
-- specialmax
+- minimumLowercase
+- maximumLowercase
+- minimumUppercase
+- maximumUppercase
+- minimumNumbers
+- maximumNumbers
+- minimumSpecial
+- maximumSpecial
 
 5. The server will return a `json` object, in the form of:
 
