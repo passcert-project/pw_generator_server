@@ -39,6 +39,17 @@ The arguments are as follows:
 
 3. Run the command `./generate_bw_passwords.py <number_of_passwords_you_want> <the_file_you_want_to_output_to>`
 
-**Example**: `./generate_bw_passwords.py 10 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt`
+**Example**: `./generate_bw_passwords.py 10 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt` 
 
 **NOTE:** This script may take a while. For 100 pw, it takes about 1 minute. For 1000 pw, it takes about 10 minutes.
+
+
+# To use the Jasmin Generator script
+
+1. Install python if you don't have. I recommend [pyenv](https://github.com/pyenv/pyenv).
+
+2. Run the command `./generate_jasmin_passwords.py <number_of_passwords_you_want> <password_policy> <the_file_you_want_to_output_to>`
+
+**Example**: `./generate_jasmin_passwords.py 10 14 1 14 1 14 1 14 1 14 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt` that comply with the policy `required: upper, lower, digit, special; minlength: 10;`
+
+**NOTE:** This script may take a while. 
