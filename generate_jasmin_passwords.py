@@ -18,6 +18,7 @@ import sys
 # required: upper, lower, digit, symbol; minlength: 15;
 # 15 1 15 1 15 1 15 1 15
 
+
 if len(sys.argv) != 12:
     raise ValueError(
         'Please provide the number of pws you want to generate, the policy (length=9) and the file name to save it to.')
