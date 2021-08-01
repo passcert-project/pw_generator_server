@@ -4,20 +4,6 @@ import subprocess
 import time
 import sys
 
-# bitwarden's default => -uln --length 14
-# --uppercase, -u (include uppercase)
-# --lowercase, -l (include lowercase)
-# --number, -n (include numbers)
-# --special, -s (include special characters)
-# --length <length> (length of the password, min. of 5)
-# bitwarden's default for jasmin => 14 1 14 1 14 1 14 0 0
-
-# required: upper, lower, digit, symbol; minlength: 10;
-# 14 1 14 1 14 1 14 1 14
-
-# required: upper, lower, digit, symbol; minlength: 15;
-# 15 1 15 1 15 1 15 1 15
-
 
 if len(sys.argv) != 12:
     raise ValueError(
