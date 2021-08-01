@@ -125,25 +125,32 @@ def check_failure(pw: str):
 
 
 def main():
+    global failed
     if len(sys.argv) != 11:
         raise ValueError(
             'Please provide the file that has the pws that you want to check and the policy to check against.')
     start = time.time()
+    list_of_files = []
+    for root, dirs, files in os.walk(sys.argv[1]):
+        for file in files:
+            list_of_files.append(os.path.join(root, file))
 
     # read and interpret the policy
     read_policy()
+    for file in list_of_files:
+        failed = 0
+        with open(f"{file}", 'r') as fp:
+            for count, line in enumerate(fp):
+                check_failure(line)
 
-    with open(f"{sys.argv[1]}", 'r') as fp:
-        for count, line in enumerate(fp):
-            check_failure(line)
+            total_lines = count + 1
+            failed_percentage = failed / total_lines
+            print(f'File Analyzed: {file}')
+            print('Total Passwords Analyzed:', total_lines)
+            print('Total Compliant Passwords:', total_lines - failed)
+            print('Total Non-Compliant Passwords:', failed)
+            print(f'Failed Percentage: {failed_percentage*100}%\n')
 
-    # each line is a password. this will be used to calculate %
-    total_lines = count + 1
-    failed_percentage = failed / total_lines
-
-    print('Total Passwords Analyzed:', count + 1)
-    print('Total Non-Compliant Passwords:', failed)
-    print(f'Failed %: {failed_percentage*100}%')
     end = time.time()
     print("\n\n" + str(round(end-start, 2)) + " secs which is ")
     print(str(round(end-start, 2)/60) + " mins")
