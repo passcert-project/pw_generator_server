@@ -16,7 +16,9 @@ git clone https://github.com/passcert-project/pw_generator_server
 pip install -r requirements.txt
 ```
 
-3. Run the service: 
+## To run the service
+
+1. Run the webserver: 
 
 ```
 python webserver.py
@@ -51,28 +53,22 @@ The server will return a `json` object, in the form of:
 
 1. Run the command `npm install -g @bitwarden/cli`
 
-2. Install python if you don't have. I recommend [pyenv](https://github.com/pyenv/pyenv).
-
-3. Run the command `./generate_bw_passwords.py <number_of_passwords_you_want> <the_file_you_want_to_output_to>`
+2. Run the command `./generate_bw_passwords.py <number_of_passwords_you_want> <the_file_you_want_to_output_to>`
 
 **Example**: `./generate_bw_passwords.py 10 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt` 
 
-**NOTE:** This script may take a while. For 100 pw, it takes about 1 minute. For 1000 pw, it takes about 10 minutes.
+**NOTE:** This script may take a while. For 100 passwords, it takes about 1 minute. For 1000 passwords, it takes about 10 minutes.
 
 
 ## To use the Jasmin Generator script
 
-1. Install python if you don't have. I recommend [pyenv](https://github.com/pyenv/pyenv).
-
-2. Run the command `./generate_jasmin_passwords.py <number_of_passwords_you_want> <password_policy> <the_file_you_want_to_output_to>`
+Run the command `./generate_jasmin_passwords.py <number_of_passwords_you_want> <password_policy> <the_file_you_want_to_output_to>`
 
 **Example**: `./generate_jasmin_passwords.py 10 14 1 14 1 14 1 14 1 14 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt` that comply with the policy `minlength: 10; required: upper; required: lower; required: digit; required: special;`
 
 # To use the Policy Compliance Check script
 
-1. Install python if you don't have. I recommend [pyenv](https://github.com/pyenv/pyenv).
-
-2. Run the command `./policy_compliance_check.py <path_to_the_folder_with_test_data> <the_policy_to_check_against>`
+Run the command `./policy_compliance_check.py <path_to_the_folder_with_test_data> <the_policy_to_check_against>`
 
 **Example:** `./policy_compliance_check.py test_data/jasmin_default 14 1 14 1 14 1 14 1 14` will check the folder `./test_data/jasmin_default` against the policy `minlength: 10; required: upper; required: lower; required: digit; required: special;`.
 
