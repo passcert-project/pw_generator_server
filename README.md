@@ -66,7 +66,7 @@ Run the command `./generate_jasmin_passwords.py <number_of_passwords_you_want> <
 
 **Example**: `./generate_jasmin_passwords.py 10 14 1 14 1 14 1 14 1 14 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt` that comply with the policy `minlength: 10; required: upper; required: lower; required: digit; required: special;`
 
-# To use the Policy Compliance Check script
+## To use the Policy Compliance Check script
 
 Run the command `./policy_compliance_check.py <path_to_the_folder_with_test_data> <the_policy_to_check_against>`
 
