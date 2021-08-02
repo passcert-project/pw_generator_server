@@ -1,12 +1,28 @@
-# To use the webserver that generates random passwords using Passcert's Generator
+# Jasmin Password Generator as a Service
 
-1. Install python if you don't have. I recommend [pyenv](https://github.com/pyenv/pyenv).
+RESTful service that exposes a verified password generator (coded in [Jasmin](https://github.com/jasmin-lang/jasmin) and proved in [Easycrypt](https://www.easycrypt.info)).
 
-2. Run the command `pip install flask`
+## Instructions
+To use the service and test the service, you can follow the steps:
 
-3. Run the command `./webserver.py`. The server is now ready. 
+1. Clone this repository:
+```
+git clone https://github.com/passcert-project/pw_generator_server
+```
 
-4. To see it functioning, use a tool like [Postman](https://www.postman.com/), and send a POST request with the body of the request (raw option in [Postman](https://www.postman.com/)) like:
+2. Install all the Python requirements:
+
+```
+pip install -r requirements.txt
+```
+
+3. Run the service: 
+
+```
+python webserver.py
+```
+The server is now ready. To see it functioning, you can use a tool like [Postman](https://www.postman.com/) to send a POST request. 
+The body of the request (raw option in [Postman](https://www.postman.com/)) should be similar to the following:
 
 ```json
 {"pw_settings": "14 1 14 1 14 1 14 1 14"}
@@ -23,7 +39,7 @@ The arguments are as follows:
 - minimumSpecial
 - maximumSpecial
 
-5. The server will return a `json` object, in the form of:
+The server will return a `json` object, in the form of:
 
 ```json
 {
@@ -31,7 +47,7 @@ The arguments are as follows:
 }
 ```
 
-# To use the Bitwarden Generator script
+## To use the Bitwarden Generator script
 
 1. Run the command `npm install -g @bitwarden/cli`
 
@@ -44,7 +60,7 @@ The arguments are as follows:
 **NOTE:** This script may take a while. For 100 pw, it takes about 1 minute. For 1000 pw, it takes about 10 minutes.
 
 
-# To use the Jasmin Generator script
+## To use the Jasmin Generator script
 
 1. Install python if you don't have. I recommend [pyenv](https://github.com/pyenv/pyenv).
 
