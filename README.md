@@ -18,7 +18,7 @@ pip install -r requirements.txt
 
 ## To run the service
 
-1. Run the webserver: 
+Run the webserver: 
 
 ```
 python webserver.py
@@ -48,6 +48,8 @@ The server will return a `json` object, in the form of:
     "generated_password": "<random_password>"
 }
 ```
+
+**NOTE:** The Jasmin password generator included in this repository is a pre-compiled binary file (x86). If you want to create your own binary, you will have to [follow the instructions in Passcert's RPG repository](https://github.com/passcert-project/random-password-generator).
 
 ## To use the Bitwarden Generator script
 
