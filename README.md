@@ -3,7 +3,7 @@
 RESTful service that exposes a verified password generator (coded in [Jasmin](https://github.com/jasmin-lang/jasmin) and proved in [Easycrypt](https://www.easycrypt.info)).
 
 ## Instructions
-To use the service and test the service, you can follow the steps:
+To use and test the service, you can follow the steps:
 
 1. Clone this repository:
 ```
