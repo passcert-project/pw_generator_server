@@ -2,7 +2,6 @@
 import os
 import time
 import sys
-from typing import Counter
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 LOWER = 'abcdefghijklmnopqrstuvwxyz'
