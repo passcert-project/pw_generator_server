@@ -33,7 +33,7 @@ The server is now running.
 
 ## Generating Passwords With The Server
 
-You can use a tool like [Postman](https://www.postman.com/) to send a POST request. 
+You can use a tool like [Postman](https://www.postman.com/) to send a POST request to `https://localhost:5000`. 
 The body of the request (raw option in [Postman](https://www.postman.com/)) should be similar to the following:
 
 ```json
