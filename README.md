@@ -2,7 +2,7 @@
 
 RESTful service that exposes a verified password generator (coded in [Jasmin](https://github.com/jasmin-lang/jasmin) and proved in [Easycrypt](https://www.easycrypt.info)).
 
-To read the instructions for setting up the service, [click here](https://github.com/passcert-project/pw_generator_server/tree/main/generator_server/README.md)
+To read the instructions for setting up the service, [click here](https://github.com/passcert-project/pw_generator_server/tree/main/generator_server)
 
 ## To use the Bitwarden Generator script
 
