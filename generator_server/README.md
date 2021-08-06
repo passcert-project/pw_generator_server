@@ -9,11 +9,9 @@ RESTful service that exposes a verified password generator (coded in [Jasmin](ht
 
 2. Run the command `docker-compose up`
 
-3. Now the server is running. 
+The server is now running. 
 
 ### Running the script
-To use and test the service, you can follow the steps:
-
 1. Clone this repository:
 ```
 git clone https://github.com/passcert-project/pw_generator_server
