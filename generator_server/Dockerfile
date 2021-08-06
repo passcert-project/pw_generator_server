@@ -11,4 +11,4 @@ EXPOSE 5000
 COPY ./webserver.py .
 COPY ./passwordGeneratorApp.out .
 COPY ./.env .
-CMD [ "flask", "run" ]
+CMD [ "flask", "run", "--cert=adhoc"]

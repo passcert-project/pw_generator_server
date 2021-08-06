@@ -3,10 +3,10 @@ import subprocess
 import json
 from flask import Flask, request, jsonify
 
-api = Flask(__name__)
+app = Flask(__name__)
 
 
-@api.route('/generate', methods=['POST'])
+@app.route('/generate', methods=['POST'])
 def generate_random_password():
     pw_options = request.get_json()
     print(f'GOT THESE OPTIONS => {pw_options}')
@@ -22,10 +22,10 @@ def generate_random_password():
     return jsonify({"generated_password": result[2]})
 
 
-@api.route('/')
+@app.route('/')
 def hello_world():
-    return "Hello World!"
+    return "<h1>Welcome to Passcert's Password Generator.</h1><br/><h3>Please make a POST request to /generate to receive a new password.</h3>"
 
 
 if __name__ == '__main__':
-    api.run()
+    app.run(ssl_context='adhoc')
