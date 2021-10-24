@@ -25,7 +25,7 @@ Passwords were generated according to:
 And should be checked against:
 - `8 0 8 0 8 0 8 0 8 --minclasses 3`  -> 94% compliance.
 
-However, since Bitwarden sets the default length of the password to 14 when the minlength given is lower than 14, there are 6 failing passwords according to this policy --- they have more than 8 lowercase letters. The real policy these passwords should be:
+However, since Bitwarden sets the default length of the password to 14 when the minlength given is lower than 14, there are 6 failing passwords according to this policy --- they have more than 8 lowercase/uppercase letters. The real policy these passwords should be:
 
 - `14 0 14 0 14 0 14 0 14 --minclasses 3` -> 100% compliance.
 
