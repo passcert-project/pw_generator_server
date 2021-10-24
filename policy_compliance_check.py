@@ -3,6 +3,7 @@
 # pylint: disable=W0612
 # pylint: disable=C0111
 # pylint: disable=C0103
+# pylint: disable=W0631
 import os
 import sys
 import json
