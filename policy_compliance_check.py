@@ -1,16 +1,18 @@
+#!/usr/bin/env python3
 # pylint: disable=W0603
 # pylint: disable=W0612
 # pylint: disable=C0111
 # pylint: disable=C0103
-
-#!/usr/bin/env python3
 import os
 import sys
+import json
+
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 LOWER = 'abcdefghijklmnopqrstuvwxyz'
 DIGIT = '0123456789'
 SPECIAL = '-~!@#$%^&*_+=`|(){}[:;"\'<>,.? ]'
+BLOCKLIST = json.load(open('blocklistWordsData.json', 'r'))
 
 MUST_HAVE_LOWER = False
 MUST_HAVE_UPPER = False
@@ -30,6 +32,7 @@ LOWER_OCCURENCES_COMPLIANT = False
 UPPER_OCCURENCES_COMPLIANT = False
 DIGIT_OCCURENCES_COMPLIANT = False
 SPECIAL_OCCURENCES_COMPLIANT = False
+BLOCKLIST_COMPLIANT = True
 
 CAN_HAVE_LOWER = False
 CAN_HAVE_UPPER = False
@@ -40,18 +43,22 @@ FAILED = 0
 
 
 def has_upper(pw: str):
+    global UPPER
     return any(ext in pw for ext in UPPER)
 
 
 def has_lower(pw: str):
+    global LOWER
     return any(ext in pw for ext in LOWER)
 
 
 def has_digit(pw: str):
+    global DIGIT
     return any(ext in pw for ext in DIGIT)
 
 
 def has_special(pw: str):
+    global SPECIAL
     return any(ext in pw for ext in SPECIAL)
 
 
@@ -99,11 +106,18 @@ def check_special_occurrences_compliance(pw: str):
     global SPECIAL_OCCURENCES_COMPLIANT
     count = 0
     for c in pw:
-        if c in DIGIT:
+        if c in SPECIAL:
             count += 1
 
     if count >= SPECIAL_MIN and count <= SPECIAL_MAX:
         SPECIAL_OCCURENCES_COMPLIANT = True
+
+
+def check_blocklist_compliant(pw: str):
+    global BLOCKLIST_COMPLIANT
+    for b in BLOCKLIST["blocklist"]:
+        if b in pw:
+            BLOCKLIST_COMPLIANT = False
 
 
 def read_policy():
@@ -256,13 +270,15 @@ def check_failure(pw: str):
         return
     elif not has_special(pw) and MUST_HAVE_SPECIAL:
         #print("MUST HAVE SPECIAL")
-
         FAILED += 1
         return
     # has special but it is not compliant with specifications of occurrences
     elif has_special(pw) and not SPECIAL_OCCURENCES_COMPLIANT:
         #print("SPECIAL OCCURENCES")
-
+        FAILED += 1
+        return
+    # failed the blocklist test. This means that there is a breached password as a substring of the generated password
+    elif not BLOCKLIST_COMPLIANT:
         FAILED += 1
         return
 
@@ -272,6 +288,7 @@ def main():
     global UPPER_OCCURENCES_COMPLIANT
     global DIGIT_OCCURENCES_COMPLIANT
     global SPECIAL_OCCURENCES_COMPLIANT
+    global BLOCKLIST_COMPLIANT
     global FAILED
 
     total_pws_checked = 0
@@ -319,6 +336,7 @@ def main():
                 check_upper_occurrences_compliance(line)
                 check_digit_occurrences_compliance(line)
                 check_special_occurrences_compliance(line)
+                check_blocklist_compliant(line)
                 # check for overall pw compliance
                 check_failure(line)
                 # reset values for next iteration
@@ -326,6 +344,7 @@ def main():
                 UPPER_OCCURENCES_COMPLIANT = False
                 DIGIT_OCCURENCES_COMPLIANT = False
                 SPECIAL_OCCURENCES_COMPLIANT = False
+                BLOCKLIST_COMPLIANT = True
 
             total_file_lines = count + 1
             total_pws_checked += total_file_lines

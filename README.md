@@ -39,6 +39,7 @@ Run the command `./policy_compliance_check.py <path_to_the_folder_with_test_data
 **Example:** `./policy_compliance_check.py test_data/jasmin_default 14 1 14 1 14 1 14 1 14` will check the folder `./test_data/jasmin_default` against the policy `minlength: 10; required: upper; required: lower; required: digit; required: special;`.
 
 **NOTE:** 
+- **The path is to the folder that contains the test data, and not the data file itself.**
 - The minlength attribute in these examples is always fulfilled, since `14`, the length of the generated passwords, is always greater than `minlength = 10`
 - This Compliance Check Script was developed for Jasmin Generated Passwords. It is possible that this tool is not accurate for Bitwarden's Smartpasswords, because the policy is not describable in this format, e.g., this policy:
 

@@ -11,7 +11,7 @@ if len(sys.argv) != 12:
 start = time.time()
 for i in range(int(sys.argv[1])):
 
-    result = subprocess.run(["./passwordGeneratorApp.out", "-a", f"{sys.argv[2]}", f"{sys.argv[3]}",
+    result = subprocess.run(["./generator_server/passwordGeneratorApp.out", "-a", f"{sys.argv[2]}", f"{sys.argv[3]}",
                              f"{sys.argv[4]}", f"{sys.argv[5]}", f"{sys.argv[6]}", f"{sys.argv[7]}", f"{sys.argv[8]}",
                              f"{sys.argv[9]}", f"{sys.argv[10]}"], stdout=subprocess.PIPE).stdout.decode('utf-8')
 
