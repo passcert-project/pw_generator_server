@@ -34,9 +34,11 @@ The policy has this structure:
 
 ## To use the Policy Compliance Check script
 
-Run the command `./policy_compliance_check.py <path_to_the_folder_with_test_data> <the_policy_to_check_against>`
+Run the command `./policy_compliance_check.py <path_to_the_folder_with_test_data> <the_policy_to_check_against> --minclasses <value>`
 
-**Example:** `./policy_compliance_check.py test_data/jasmin_default 14 1 14 1 14 1 14 1 14` will check the folder `./test_data/jasmin_default` against the policy `minlength: 10; required: upper; required: lower; required: digit; required: special;`.
+**Example:** `./policy_compliance_check.py test_data/jasmin_default 14 1 14 1 14 1 14 1 14` will check the folder `./test_data/jasmin_default` against the policy `minlength: 10; required: upper; required: lower; required: digit; required: special;`. 
+
+The `--minclasses` argument is optional. Only integers between 1 and 4 are valid values. Usage: `--minclasses 3`. 
 
 **NOTE:** 
 - **The path is to the folder that contains the test data, and not the data file itself.**
