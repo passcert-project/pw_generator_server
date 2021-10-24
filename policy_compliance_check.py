@@ -42,6 +42,7 @@ CAN_HAVE_UPPER = False
 CAN_HAVE_DIGIT = False
 CAN_HAVE_SPECIAL = False
 
+CHECK_BLOCKLIST = False
 FAILED = 0
 
 
@@ -120,6 +121,7 @@ def check_blocklist_compliant(pw: str):
     global BLOCKLIST_COMPLIANT
     for b in BLOCKLIST["blocklist"]:
         if b in pw:
+            # print("blocklist word => ", b)
             BLOCKLIST_COMPLIANT = False
 
 
@@ -161,6 +163,7 @@ def read_policy():
     global DIGIT_MIN
     global SPECIAL_MAX
     global SPECIAL_MIN
+    global CHECK_BLOCKLIST
 
     if int(sys.argv[3]) > 0:
         MUST_HAVE_LOWER = True
@@ -226,15 +229,29 @@ def read_policy():
         SPECIAL_MAX = int(sys.argv[10])
         SPECIAL_MIN = int(sys.argv[9])
     # minclasses
-    if len(sys.argv) == 13 and sys.argv[11] == '--minclasses':
-        if (int(sys.argv[12]) >= 1 and int(sys.argv[12]) <= 4):
-            MINCLASSES = int(sys.argv[12])
-        else:
-            raise ValueError(
-                '--minclasses <value> : <value> should be an int between 1 and 4.')
-    elif len(sys.argv) == 12 and sys.argv[11] == '--minclasses':
-        warnings.warn(
-            "--minclasses argument will not be read. It's missing a value.")
+    if '--minclasses' in sys.argv:
+        index = sys.argv.index('--minclasses')
+        arg_length = len(sys.argv)
+        # no more values after --minclasses
+        if (arg_length == index + 1):
+            warnings.warn(
+                "--minclasses argument will not be read. It's missing a value.")
+        # more values after --minclasses
+        elif (arg_length > index + 1):
+            # no value after, only another argument option
+            if (sys.argv[index + 1] == '--blocklist'):
+                warnings.warn(
+                    "--minclasses argument will not be read. It's missing a value.")
+            # next is a number
+            elif (int(sys.argv[index + 1]) >= 1 and int(sys.argv[index + 1]) <= 4):
+                MINCLASSES = int(sys.argv[index + 1])
+            else:
+                raise ValueError(
+                    '--minclasses <value> : <value> should be an int between 1 and 4.')
+
+    # blocklist
+    if '--blocklist' in sys.argv:
+        CHECK_BLOCKLIST = True
 
 
 def check_failure(pw: str):
@@ -258,62 +275,81 @@ def check_failure(pw: str):
     # print(f"READING THIS PW => {pw}")
     # has lower and cannot have it
     if has_lower(pw) and not MUST_HAVE_LOWER and not CAN_HAVE_LOWER:
-        # print("CANNOT HAVE LOWER")
+        print("CANNOT HAVE LOWER")
         FAILED += 1
+        print("failed => ", pw)
         return
     # doesn't have lower and it must have it
     elif not has_lower(pw) and MUST_HAVE_LOWER:
-        # print("MUST HAVE LOWER")
+        print("MUST HAVE LOWER")
         FAILED += 1
+        print("failed => ", pw)
         return
     # has lower but it is not compliant with specifications of occurrences
     elif has_lower(pw) and not LOWER_OCCURENCES_COMPLIANT:
-        # print("LOWER OCCURENCES")
+        print("LOWER OCCURENCES")
         FAILED += 1
+        print("failed => ", pw)
         return
 
     elif has_upper(pw) and not MUST_HAVE_UPPER and not CAN_HAVE_UPPER:
-        # print("CANNOT HAVE UPPER")
+        print("CANNOT HAVE UPPER")
         FAILED += 1
+        print("failed => ", pw)
         return
     elif not has_upper(pw) and MUST_HAVE_UPPER:
-        # print("MUST HAVE UPPER")
+        print("MUST HAVE UPPER")
         FAILED += 1
+        print("failed => ", pw)
         return
     # has upper but it is not compliant with specifications of occurrences
     elif has_upper(pw) and not UPPER_OCCURENCES_COMPLIANT:
-        # print("UPPER OCCURENCES")
+        print("UPPER OCCURENCES")
         FAILED += 1
+        print("failed => ", pw)
         return
     elif has_digit(pw) and not MUST_HAVE_DIGIT and not CAN_HAVE_DIGIT:
-        # print("CANNOT HAVE DIGIT")
+        print("CANNOT HAVE DIGIT")
         FAILED += 1
+        print("failed => ", pw)
         return
     elif not has_digit(pw) and MUST_HAVE_DIGIT:
-        #print("MUST HAVE DIGIT")
+        print("MUST HAVE DIGIT")
         FAILED += 1
+        print("failed => ", pw)
         return
     # has digit but it is not compliant with specifications of occurrences
     elif has_digit(pw) and not DIGIT_OCCURENCES_COMPLIANT:
-        #print("DIGIT OCCURENCES")
+        print("DIGIT OCCURENCES")
         FAILED += 1
+        print("failed => ", pw)
         return
     elif has_special(pw) and not MUST_HAVE_SPECIAL and not CAN_HAVE_SPECIAL:
-        #print("CANNOT HAVE SPECIAL")
+        print("CANNOT HAVE SPECIAL")
         FAILED += 1
+        print("failed => ", pw)
         return
     elif not has_special(pw) and MUST_HAVE_SPECIAL:
-        #print("MUST HAVE SPECIAL")
+        print("MUST HAVE SPECIAL")
         FAILED += 1
+        print("failed => ", pw)
         return
     # has special but it is not compliant with specifications of occurrences
     elif has_special(pw) and not SPECIAL_OCCURENCES_COMPLIANT:
-        #print("SPECIAL OCCURENCES")
+        print("SPECIAL OCCURENCES")
         FAILED += 1
+        print("failed => ", pw)
         return
     # failed the blocklist test. This means that there is a breached password as a substring of the generated password
-    elif not BLOCKLIST_COMPLIANT:
+    elif CHECK_BLOCKLIST and not BLOCKLIST_COMPLIANT:
+        print("BLOCKLIST")
         FAILED += 1
+        print("failed => ", pw)
+        return
+    elif not MINCLASSES_COMPLIANT:
+        print("MINCLASSES")
+        FAILED += 1
+        print("failed => ", pw)
         return
 
 
@@ -329,16 +365,19 @@ def main():
     total_pws_checked = 0
     total_pws_failed = 0
 
-    if len(sys.argv) > 13:
+    allowed_args = ['--blocklist', '--minclasses']
+    if len(sys.argv) > 15:
         raise ValueError(
             'Please provide the folder that contains the files of pws that you want to check and the policy to check against.')
     elif len(sys.argv) < 11:
         raise ValueError(
             'Error. Missing arguments. Check the README to understand how to use the script.')
-    elif sys.argv[11] != '--minclasses':
+    elif (len(sys.argv) == 12 and sys.argv[11] not in allowed_args) or (len(sys.argv) == 14 and (allowed_args[0] not in sys.argv or allowed_args[1] not in sys.argv)):
         raise ValueError(
             'Error. Unknown argument. Did you mispelled?')
-    # start = time.time()
+
+    # elif len(sys.argv) == 13 and sys.argv[11] not in allowed_args:
+        # start = time.time()
     list_of_files = []
     for root, dirs, files in os.walk(sys.argv[1]):
         for file in files:
