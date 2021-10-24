@@ -1,6 +1,10 @@
+# pylint: disable=W0603
+# pylint: disable=W0612
+# pylint: disable=C0111
+# pylint: disable=C0103
+
 #!/usr/bin/env python3
 import os
-import time
 import sys
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -8,31 +12,31 @@ LOWER = 'abcdefghijklmnopqrstuvwxyz'
 DIGIT = '0123456789'
 SPECIAL = '-~!@#$%^&*_+=`|(){}[:;"\'<>,.? ]'
 
-must_have_lower = False
-must_have_upper = False
-must_have_digit = False
-must_have_special = False
+MUST_HAVE_LOWER = False
+MUST_HAVE_UPPER = False
+MUST_HAVE_DIGIT = False
+MUST_HAVE_SPECIAL = False
 
-lower_max = 0
-lower_min = 0
-upper_max = 0
-upper_min = 0
-digit_max = 0
-digit_min = 0
-special_max = 0
-special_min = 0
+LOWER_MAX = 0
+LOWER_MIN = 0
+UPPER_MAX = 0
+UPPER_MIN = 0
+DIGIT_MAX = 0
+DIGIT_MIN = 0
+SPECIAL_MAX = 0
+SPECIAL_MIN = 0
 
-lower_occurences_compliant = False
-upper_occurences_compliant = False
-digit_occurences_compliant = False
-special_occurences_compliant = False
+LOWER_OCCURENCES_COMPLIANT = False
+UPPER_OCCURENCES_COMPLIANT = False
+DIGIT_OCCURENCES_COMPLIANT = False
+SPECIAL_OCCURENCES_COMPLIANT = False
 
-can_have_lower = False
-can_have_upper = False
-can_have_digit = False
-can_have_special = False
+CAN_HAVE_LOWER = False
+CAN_HAVE_UPPER = False
+CAN_HAVE_DIGIT = False
+CAN_HAVE_SPECIAL = False
 
-failed = 0
+FAILED = 0
 
 
 def has_upper(pw: str):
@@ -52,223 +56,223 @@ def has_special(pw: str):
 
 
 def check_lower_occurrences_compliance(pw: str):
-    global lower_min
-    global lower_max
-    global lower_occurences_compliant
+    global LOWER_MIN
+    global LOWER_MAX
+    global LOWER_OCCURENCES_COMPLIANT
     count = 0
     for c in pw:
         if c in LOWER:
             count += 1
 
-    if count >= lower_min and count <= lower_max:
-        lower_occurences_compliant = True
+    if count >= LOWER_MIN and count <= LOWER_MAX:
+        LOWER_OCCURENCES_COMPLIANT = True
 
 
 def check_upper_occurrences_compliance(pw: str):
-    global upper_min
-    global upper_max
-    global upper_occurences_compliant
+    global UPPER_MIN
+    global UPPER_MAX
+    global UPPER_OCCURENCES_COMPLIANT
     count = 0
     for c in pw:
         if c in UPPER:
             count += 1
-    if count >= upper_min and count <= upper_max:
-        upper_occurences_compliant = True
+    if count >= UPPER_MIN and count <= UPPER_MAX:
+        UPPER_OCCURENCES_COMPLIANT = True
 
 
 def check_digit_occurrences_compliance(pw: str):
-    global digit_min
-    global digit_max
-    global digit_occurences_compliant
+    global DIGIT_MIN
+    global DIGIT_MAX
+    global DIGIT_OCCURENCES_COMPLIANT
     count = 0
     for c in pw:
         if c in DIGIT:
             count += 1
 
-    if count >= digit_min and count <= digit_max:
-        digit_occurences_compliant = True
+    if count >= DIGIT_MIN and count <= DIGIT_MAX:
+        DIGIT_OCCURENCES_COMPLIANT = True
 
 
 def check_special_occurrences_compliance(pw: str):
-    global special_min
-    global special_max
-    global special_occurences_compliant
+    global SPECIAL_MIN
+    global SPECIAL_MAX
+    global SPECIAL_OCCURENCES_COMPLIANT
     count = 0
     for c in pw:
         if c in DIGIT:
             count += 1
 
-    if count >= special_min and count <= special_max:
-        special_occurences_compliant = True
+    if count >= SPECIAL_MIN and count <= SPECIAL_MAX:
+        SPECIAL_OCCURENCES_COMPLIANT = True
 
 
 def read_policy():
-    global must_have_lower
-    global must_have_upper
-    global must_have_digit
-    global must_have_special
-    global can_have_lower
-    global can_have_upper
-    global can_have_digit
-    global can_have_special
-    global lower_max
-    global lower_min
-    global upper_max
-    global upper_min
-    global digit_max
-    global digit_min
-    global special_max
-    global special_min
+    global MUST_HAVE_LOWER
+    global MUST_HAVE_UPPER
+    global MUST_HAVE_DIGIT
+    global MUST_HAVE_SPECIAL
+    global CAN_HAVE_LOWER
+    global CAN_HAVE_UPPER
+    global CAN_HAVE_DIGIT
+    global CAN_HAVE_SPECIAL
+    global LOWER_MAX
+    global LOWER_MIN
+    global UPPER_MAX
+    global UPPER_MIN
+    global DIGIT_MAX
+    global DIGIT_MIN
+    global SPECIAL_MAX
+    global SPECIAL_MIN
 
     if int(sys.argv[3]) > 0:
-        must_have_lower = True
-        can_have_lower = True
-        lower_max = int(sys.argv[4])
-        lower_min = int(sys.argv[3])
+        MUST_HAVE_LOWER = True
+        CAN_HAVE_LOWER = True
+        LOWER_MAX = int(sys.argv[4])
+        LOWER_MIN = int(sys.argv[3])
     if int(sys.argv[3]) == 0 and int(sys.argv[4]) > 0:
-        must_have_lower = False
-        can_have_lower = True
-        lower_max = int(sys.argv[4])
-        lower_min = int(sys.argv[3])
+        MUST_HAVE_LOWER = False
+        CAN_HAVE_LOWER = True
+        LOWER_MAX = int(sys.argv[4])
+        LOWER_MIN = int(sys.argv[3])
     if int(sys.argv[3]) == 0 and int(sys.argv[4]) == 0:
-        must_have_lower = False
-        can_have_lower = False
-        lower_max = int(sys.argv[4])
-        lower_min = int(sys.argv[3])
+        MUST_HAVE_LOWER = False
+        CAN_HAVE_LOWER = False
+        LOWER_MAX = int(sys.argv[4])
+        LOWER_MIN = int(sys.argv[3])
     # upper policy
     if int(sys.argv[5]) > 0:
-        must_have_upper = True
-        can_have_upper = True
-        upper_max = int(sys.argv[6])
-        upper_min = int(sys.argv[5])
+        MUST_HAVE_UPPER = True
+        CAN_HAVE_UPPER = True
+        UPPER_MAX = int(sys.argv[6])
+        UPPER_MIN = int(sys.argv[5])
     if int(sys.argv[5]) == 0 and int(sys.argv[6]) > 0:
-        must_have_upper = False
-        can_have_upper = True
-        upper_max = int(sys.argv[6])
-        upper_min = int(sys.argv[5])
+        MUST_HAVE_UPPER = False
+        CAN_HAVE_UPPER = True
+        UPPER_MAX = int(sys.argv[6])
+        UPPER_MIN = int(sys.argv[5])
     if int(sys.argv[5]) == 0 and int(sys.argv[6]) == 0:
-        must_have_upper = False
-        can_have_upper = False
-        upper_max = int(sys.argv[6])
-        upper_min = int(sys.argv[5])
+        MUST_HAVE_UPPER = False
+        CAN_HAVE_UPPER = False
+        UPPER_MAX = int(sys.argv[6])
+        UPPER_MIN = int(sys.argv[5])
     # digit policy
     if int(sys.argv[7]) > 0:
-        must_have_digit = True
-        can_have_digit = True
-        digit_max = int(sys.argv[8])
-        digit_min = int(sys.argv[7])
+        MUST_HAVE_DIGIT = True
+        CAN_HAVE_DIGIT = True
+        DIGIT_MAX = int(sys.argv[8])
+        DIGIT_MIN = int(sys.argv[7])
     if int(sys.argv[7]) == 0 and int(sys.argv[8]) > 0:
-        must_have_digit = False
-        can_have_digit = True
-        digit_max = int(sys.argv[8])
-        digit_min = int(sys.argv[7])
+        MUST_HAVE_DIGIT = False
+        CAN_HAVE_DIGIT = True
+        DIGIT_MAX = int(sys.argv[8])
+        DIGIT_MIN = int(sys.argv[7])
     if int(sys.argv[7]) == 0 and int(sys.argv[8]) == 0:
-        must_have_digit = False
-        can_have_digit = False
-        digit_max = int(sys.argv[8])
-        digit_min = int(sys.argv[7])
+        MUST_HAVE_DIGIT = False
+        CAN_HAVE_DIGIT = False
+        DIGIT_MAX = int(sys.argv[8])
+        DIGIT_MIN = int(sys.argv[7])
     # special policy
     if int(sys.argv[9]) > 0:
-        must_have_special = True
-        can_have_special = True
-        special_max = int(sys.argv[10])
-        special_min = int(sys.argv[9])
+        MUST_HAVE_SPECIAL = True
+        CAN_HAVE_SPECIAL = True
+        SPECIAL_MAX = int(sys.argv[10])
+        SPECIAL_MIN = int(sys.argv[9])
     if int(sys.argv[9]) == 0 and int(sys.argv[10]) > 0:
-        must_have_special = False
-        can_have_special = True
-        special_max = int(sys.argv[10])
-        special_min = int(sys.argv[9])
+        MUST_HAVE_SPECIAL = False
+        CAN_HAVE_SPECIAL = True
+        SPECIAL_MAX = int(sys.argv[10])
+        SPECIAL_MIN = int(sys.argv[9])
     if int(sys.argv[9]) == 0 and int(sys.argv[10]) == 0:
-        must_have_special = False
-        can_have_special = False
-        special_max = int(sys.argv[10])
-        special_min = int(sys.argv[9])
+        MUST_HAVE_SPECIAL = False
+        CAN_HAVE_SPECIAL = False
+        SPECIAL_MAX = int(sys.argv[10])
+        SPECIAL_MIN = int(sys.argv[9])
 
 
 def check_failure(pw: str):
-    global must_have_lower
-    global must_have_upper
-    global must_have_digit
-    global must_have_special
-    global can_have_lower
-    global can_have_upper
-    global can_have_digit
-    global can_have_special
-    global lower_occurences_compliant
-    global upper_occurences_compliant
-    global digit_occurences_compliant
-    global special_occurences_compliant
-    global failed
+    global MUST_HAVE_LOWER
+    global MUST_HAVE_UPPER
+    global MUST_HAVE_DIGIT
+    global MUST_HAVE_SPECIAL
+    global CAN_HAVE_LOWER
+    global CAN_HAVE_UPPER
+    global CAN_HAVE_DIGIT
+    global CAN_HAVE_SPECIAL
+    global LOWER_OCCURENCES_COMPLIANT
+    global UPPER_OCCURENCES_COMPLIANT
+    global DIGIT_OCCURENCES_COMPLIANT
+    global SPECIAL_OCCURENCES_COMPLIANT
+    global FAILED
     check_lower_occurrences_compliance(pw)
     check_upper_occurrences_compliance(pw)
     check_digit_occurrences_compliance(pw)
     check_special_occurrences_compliance(pw)
     # print(f"READING THIS PW => {pw}")
     # has lower and cannot have it
-    if has_lower(pw) and not must_have_lower and not can_have_lower:
+    if has_lower(pw) and not MUST_HAVE_LOWER and not CAN_HAVE_LOWER:
         # print("CANNOT HAVE LOWER")
-        failed += 1
+        FAILED += 1
         return
     # doesn't have lower and it must have it
-    elif not has_lower(pw) and must_have_lower:
+    elif not has_lower(pw) and MUST_HAVE_LOWER:
         # print("MUST HAVE LOWER")
-        failed += 1
+        FAILED += 1
         return
     # has lower but it is not compliant with specifications of occurrences
-    elif has_lower(pw) and not lower_occurences_compliant:
+    elif has_lower(pw) and not LOWER_OCCURENCES_COMPLIANT:
         # print("LOWER OCCURENCES")
-        failed += 1
+        FAILED += 1
         return
 
-    elif has_upper(pw) and not must_have_upper and not can_have_upper:
+    elif has_upper(pw) and not MUST_HAVE_UPPER and not CAN_HAVE_UPPER:
         # print("CANNOT HAVE UPPER")
-        failed += 1
+        FAILED += 1
         return
-    elif not has_upper(pw) and must_have_upper:
+    elif not has_upper(pw) and MUST_HAVE_UPPER:
         # print("MUST HAVE UPPER")
-        failed += 1
+        FAILED += 1
         return
     # has upper but it is not compliant with specifications of occurrences
-    elif has_upper(pw) and not upper_occurences_compliant:
+    elif has_upper(pw) and not UPPER_OCCURENCES_COMPLIANT:
         # print("UPPER OCCURENCES")
-        failed += 1
+        FAILED += 1
         return
-    elif has_digit(pw) and not must_have_digit and not can_have_digit:
+    elif has_digit(pw) and not MUST_HAVE_DIGIT and not CAN_HAVE_DIGIT:
         # print("CANNOT HAVE DIGIT")
-        failed += 1
+        FAILED += 1
         return
-    elif not has_digit(pw) and must_have_digit:
+    elif not has_digit(pw) and MUST_HAVE_DIGIT:
         #print("MUST HAVE DIGIT")
-        failed += 1
+        FAILED += 1
         return
     # has digit but it is not compliant with specifications of occurrences
-    elif has_digit(pw) and not digit_occurences_compliant:
+    elif has_digit(pw) and not DIGIT_OCCURENCES_COMPLIANT:
         #print("DIGIT OCCURENCES")
-        failed += 1
+        FAILED += 1
         return
-    elif has_special(pw) and not must_have_special and not can_have_special:
+    elif has_special(pw) and not MUST_HAVE_SPECIAL and not CAN_HAVE_SPECIAL:
         #print("CANNOT HAVE SPECIAL")
-        failed += 1
+        FAILED += 1
         return
-    elif not has_special(pw) and must_have_special:
+    elif not has_special(pw) and MUST_HAVE_SPECIAL:
         #print("MUST HAVE SPECIAL")
 
-        failed += 1
+        FAILED += 1
         return
     # has special but it is not compliant with specifications of occurrences
-    elif has_special(pw) and not special_occurences_compliant:
+    elif has_special(pw) and not SPECIAL_OCCURENCES_COMPLIANT:
         #print("SPECIAL OCCURENCES")
 
-        failed += 1
+        FAILED += 1
         return
 
 
 def main():
-    global lower_occurences_compliant
-    global upper_occurences_compliant
-    global digit_occurences_compliant
-    global special_occurences_compliant
-    global failed
+    global LOWER_OCCURENCES_COMPLIANT
+    global UPPER_OCCURENCES_COMPLIANT
+    global DIGIT_OCCURENCES_COMPLIANT
+    global SPECIAL_OCCURENCES_COMPLIANT
+    global FAILED
 
     total_pws_checked = 0
     total_pws_failed = 0
@@ -293,10 +297,10 @@ def main():
     #         check_digit_occurrences_compliance(line)
     #         check_special_occurrences_compliance(line)
     #         check_failure(line)
-    #         lower_occurences_compliant = False
-    #         upper_occurences_compliant = False
-    #         digit_occurences_compliant = False
-    #         special_occurences_compliant = False
+    #         LOWER_OCCURENCES_COMPLIANT = False
+    #         UPPER_OCCURENCES_COMPLIANT = False
+    #         DIGIT_OCCURENCES_COMPLIANT = False
+    #         SPECIAL_OCCURENCES_COMPLIANT = False
 
     #     total_lines = count + 1
     #     failed_percentage = failed / total_lines
@@ -307,7 +311,7 @@ def main():
     #     print(f'Failed Percentage: {failed_percentage*100}%\n')
 
     for file in list_of_files:
-        failed = 0
+        FAILED = 0
         with open(f"{file}", 'r') as fp:
             for count, line in enumerate(fp):
                 # check occurrences compliance
@@ -318,19 +322,19 @@ def main():
                 # check for overall pw compliance
                 check_failure(line)
                 # reset values for next iteration
-                lower_occurences_compliant = False
-                upper_occurences_compliant = False
-                digit_occurences_compliant = False
-                special_occurences_compliant = False
+                LOWER_OCCURENCES_COMPLIANT = False
+                UPPER_OCCURENCES_COMPLIANT = False
+                DIGIT_OCCURENCES_COMPLIANT = False
+                SPECIAL_OCCURENCES_COMPLIANT = False
 
             total_file_lines = count + 1
             total_pws_checked += total_file_lines
-            total_pws_failed += failed
-            file_failed_percentage = failed / total_file_lines
+            total_pws_failed += FAILED
+            file_failed_percentage = FAILED / total_file_lines
             print(f'File Analyzed: {file}')
             print('Total Passwords Analyzed:', total_file_lines)
-            print('Total Compliant Passwords:', total_file_lines - failed)
-            print('Total Non-Compliant Passwords:', failed)
+            print('Total Compliant Passwords:', total_file_lines - FAILED)
+            print('Total Non-Compliant Passwords:', FAILED)
             print(f'Failed Percentage: {file_failed_percentage*100}%\n')
 
     overall_failed_percentage = (total_pws_failed / total_pws_checked) * 100
