@@ -6,6 +6,7 @@
 import os
 import sys
 import json
+import warnings
 
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -13,6 +14,7 @@ LOWER = 'abcdefghijklmnopqrstuvwxyz'
 DIGIT = '0123456789'
 SPECIAL = '-~!@#$%^&*_+=`|(){}[:;"\'<>,.? ]'
 BLOCKLIST = json.load(open('blocklistWordsData.json', 'r'))
+MINCLASSES = 1
 
 MUST_HAVE_LOWER = False
 MUST_HAVE_UPPER = False
@@ -33,6 +35,7 @@ UPPER_OCCURENCES_COMPLIANT = False
 DIGIT_OCCURENCES_COMPLIANT = False
 SPECIAL_OCCURENCES_COMPLIANT = False
 BLOCKLIST_COMPLIANT = True
+MINCLASSES_COMPLIANT = True
 
 CAN_HAVE_LOWER = False
 CAN_HAVE_UPPER = False
@@ -120,7 +123,28 @@ def check_blocklist_compliant(pw: str):
             BLOCKLIST_COMPLIANT = False
 
 
+def check_minclasses_compliant(pw: str):
+    global MINCLASSES_COMPLIANT
+    lower = 0
+    upper = 0
+    digit = 0
+    special = 0
+    for l in pw:
+        if l in LOWER:
+            lower = 1
+        elif l in UPPER:
+            upper = 1
+        elif l in DIGIT:
+            digit = 1
+        elif l in SPECIAL:
+            special = 1
+
+    if (lower+upper+digit+special) < MINCLASSES:
+        MINCLASSES_COMPLIANT = False
+
+
 def read_policy():
+    global MINCLASSES
     global MUST_HAVE_LOWER
     global MUST_HAVE_UPPER
     global MUST_HAVE_DIGIT
@@ -201,6 +225,16 @@ def read_policy():
         CAN_HAVE_SPECIAL = False
         SPECIAL_MAX = int(sys.argv[10])
         SPECIAL_MIN = int(sys.argv[9])
+    # minclasses
+    if len(sys.argv) == 13 and sys.argv[11] == '--minclasses':
+        if (int(sys.argv[12]) >= 1 and int(sys.argv[12]) <= 4):
+            MINCLASSES = int(sys.argv[12])
+        else:
+            raise ValueError(
+                '--minclasses <value> : <value> should be an int between 1 and 4.')
+    elif len(sys.argv) == 12 and sys.argv[11] == '--minclasses':
+        warnings.warn(
+            "--minclasses argument will not be read. It's missing a value.")
 
 
 def check_failure(pw: str):
@@ -289,14 +323,21 @@ def main():
     global DIGIT_OCCURENCES_COMPLIANT
     global SPECIAL_OCCURENCES_COMPLIANT
     global BLOCKLIST_COMPLIANT
+    global MINCLASSES_COMPLIANT
     global FAILED
 
     total_pws_checked = 0
     total_pws_failed = 0
 
-    if len(sys.argv) != 11:
+    if len(sys.argv) > 13:
         raise ValueError(
-            'Please provide the file that has the pws that you want to check and the policy to check against.')
+            'Please provide the folder that contains the files of pws that you want to check and the policy to check against.')
+    elif len(sys.argv) < 11:
+        raise ValueError(
+            'Error. Missing arguments. Check the README to understand how to use the script.')
+    elif sys.argv[11] != '--minclasses':
+        raise ValueError(
+            'Error. Unknown argument. Did you mispelled?')
     # start = time.time()
     list_of_files = []
     for root, dirs, files in os.walk(sys.argv[1]):
@@ -345,6 +386,7 @@ def main():
                 DIGIT_OCCURENCES_COMPLIANT = False
                 SPECIAL_OCCURENCES_COMPLIANT = False
                 BLOCKLIST_COMPLIANT = True
+                MINCLASSES_COMPLIANT = True
 
             total_file_lines = count + 1
             total_pws_checked += total_file_lines
