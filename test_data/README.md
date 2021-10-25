@@ -37,7 +37,7 @@ Passwords were generated according to:
 - `minlength: 10; required: upper(4, 10); required: lower(4, 6); required: digit(4, 8); required: special (4, 10);`
 
 And should be checked against:
-- `15 4 6 4 10 4 8 4 10` -> 100% compliance.
+- `16 4 6 4 10 4 8 4 10` -> 100% compliance.
 
 
 ### The `bw_required_and_allowed_ranges` batch 
