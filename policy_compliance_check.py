@@ -16,6 +16,7 @@ DIGIT = '0123456789'
 SPECIAL = '-~!@#$%^&*_+=`|(){}[:;"\'<>,.? ]'
 BLOCKLIST = json.load(open('blocklistWordsData.json', 'r'))
 MINCLASSES = 1
+LENGTH = 1
 
 MUST_HAVE_LOWER = False
 MUST_HAVE_UPPER = False
@@ -37,6 +38,7 @@ DIGIT_OCCURENCES_COMPLIANT = False
 SPECIAL_OCCURENCES_COMPLIANT = False
 BLOCKLIST_COMPLIANT = True
 MINCLASSES_COMPLIANT = True
+LENGTH_COMPLIANT = False
 
 CAN_HAVE_LOWER = False
 CAN_HAVE_UPPER = False
@@ -118,7 +120,7 @@ def check_special_occurrences_compliance(pw: str):
         SPECIAL_OCCURENCES_COMPLIANT = True
 
 
-def check_blocklist_compliant(pw: str):
+def check_blocklist_compliance(pw: str):
     global BLOCKLIST_COMPLIANT
     for b in BLOCKLIST["blocklist"]:
         if b in pw:
@@ -126,7 +128,7 @@ def check_blocklist_compliant(pw: str):
             BLOCKLIST_COMPLIANT = False
 
 
-def check_minclasses_compliant(pw: str):
+def check_minclasses_compliance(pw: str):
     global MINCLASSES_COMPLIANT
     lower = 0
     upper = 0
@@ -144,6 +146,14 @@ def check_minclasses_compliant(pw: str):
 
     if (lower+upper+digit+special) < MINCLASSES:
         MINCLASSES_COMPLIANT = False
+
+
+def check_length_compliance(pw: str):
+    global LENGTH_COMPLIANT
+    if len(pw) == LENGTH:
+        LENGTH_COMPLIANT = True
+    else:
+        LENGTH_COMPLIANT = False
 
 
 def read_policy():
@@ -165,7 +175,10 @@ def read_policy():
     global SPECIAL_MAX
     global SPECIAL_MIN
     global CHECK_BLOCKLIST
+    global LENGTH
 
+    if int(sys.argv[2]) > 0:
+        LENGTH = int(sys.argv[2])
     if int(sys.argv[3]) > 0:
         MUST_HAVE_LOWER = True
         CAN_HAVE_LOWER = True
@@ -269,11 +282,16 @@ def check_failure(pw: str):
     global DIGIT_OCCURENCES_COMPLIANT
     global SPECIAL_OCCURENCES_COMPLIANT
     global FAILED
+
+    # check occurrences compliance
     check_lower_occurrences_compliance(pw)
     check_upper_occurrences_compliance(pw)
     check_digit_occurrences_compliance(pw)
     check_special_occurrences_compliance(pw)
-    # print(f"READING THIS PW => {pw}")
+    check_blocklist_compliance(pw)
+    check_minclasses_compliance(pw)
+    check_length_compliance(pw)
+
     # has lower and cannot have it
     if has_lower(pw) and not MUST_HAVE_LOWER and not CAN_HAVE_LOWER:
         print("CANNOT HAVE LOWER")
@@ -352,6 +370,11 @@ def check_failure(pw: str):
         FAILED += 1
         print("failed => ", pw)
         return
+    elif not LENGTH_COMPLIANT:
+        print("LENGTH")
+        FAILED += 1
+        print("failed => ", pw)
+        return
 
 
 def main():
@@ -362,6 +385,7 @@ def main():
     global BLOCKLIST_COMPLIANT
     global MINCLASSES_COMPLIANT
     global FAILED
+    global LENGTH_COMPLIANT
 
     total_pws_checked = 0
     total_pws_failed = 0
@@ -412,14 +436,8 @@ def main():
         FAILED = 0
         with open(f"{file}", 'r') as fp:
             for count, line in enumerate(fp):
-                # check occurrences compliance
-                check_lower_occurrences_compliance(line)
-                check_upper_occurrences_compliance(line)
-                check_digit_occurrences_compliance(line)
-                check_special_occurrences_compliance(line)
-                check_blocklist_compliant(line)
                 # check for overall pw compliance
-                check_failure(line)
+                check_failure(line.strip())
                 # reset values for next iteration
                 LOWER_OCCURENCES_COMPLIANT = False
                 UPPER_OCCURENCES_COMPLIANT = False
@@ -427,6 +445,7 @@ def main():
                 SPECIAL_OCCURENCES_COMPLIANT = False
                 BLOCKLIST_COMPLIANT = True
                 MINCLASSES_COMPLIANT = True
+                LENGTH_COMPLIANT = False
 
             total_file_lines = count + 1
             total_pws_checked += total_file_lines
