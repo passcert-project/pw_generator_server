@@ -14,12 +14,20 @@ The `jasmin_min15` has 10000 passwords, separated by 10 files, allowing all asci
 The `bw_special` has 10000 passwords, separated by 10 files, using Bitwarden's complete generation recipe: includes lower, upper, digit and special.
 - 14 1 14 1 14 1 14 1 14
 
-**NOTE**: To test the `bw_special`, you need to change the value of `SPECIAL_BW`, in the `policy_compliance_check.py` file.
+The `bw_special_dsl` has 1000 passwords - manually generated -, separated by 10 files, using Bitwarden's complete generation recipe: includes lower, upper, digit and special and our extension to Apple's DSL.
+
+All passwords should be compliant, since they were generated using the our DSL.
+- 14 1 14 1 14 1 14 1 14
+
+**NOTE**: To test the `bw_special` and `bw_special_dsl`, you need to change the value of `SPECIAL_BW`, in the `policy_compliance_check.py` file.
 The current set is the special characters included by Bitwarden. However, we tested against this policy:
 
 `minlength: 8; required: lower; required: upper; required: digit; required: [!#$@];`
 
-Thus, the compliance must check the special characters with the set that is required --- [!#$@]. With these changes, the expected result is achieved: 26.71% of the passwords are non-compliant.
+Thus, the compliance must check the special characters with the set that is required --- [!#$@]. 
+
+With these changes, for `bw_special` the expected result is achieved: 26.71% of the passwords are non-compliant.
+And for `bw_special_dsl` it is also achieved: 100% compliance.
 
 ## Manually collected passwords
 
