@@ -11,6 +11,16 @@ The `jasmin_default` has 10000 passwords, separated by 10 files, using Jasmin's 
 The `jasmin_min15` has 10000 passwords, separated by 10 files, allowing all ascii characters and length=15.
 - 15 1 15 1 15 1 15 1 15
 
+The `bw_special` has 10000 passwords, separated by 10 files, using Bitwarden's complete generation recipe: includes lower, upper, digit and special.
+- 14 1 14 1 14 1 14 1 14
+
+**NOTE**: To test the `bw_special`, you need to change the value of `SPECIAL_BW`, in the `policy_compliance_check.py` file.
+The current set is the special characters included by Bitwarden. However, we tested against this policy:
+
+`minlength: 8; required: lower; required: upper; required: digit; required: [!#$@];`
+
+Thus, the compliance must check the special characters with the set that is required --- [!#$@]. With these changes, the expected result is achieved: 26.71% of the passwords are non-compliant.
+
 ## Manually collected passwords
 
 For these tests, we manually generated 100 passwords for each policy. We used the [dummy-server](https://github.com/passcert-project/dummy-server) and just changed the policy accordingly.

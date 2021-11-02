@@ -12,6 +12,17 @@ To read the instructions for setting up the service, [click here](https://github
 
 **Example**: `./generate_bw_passwords.py 10 10passwordsbw.txt` will generate 10 passwords to the file `10passwordsbw.txt` 
 
+You can define what character classes you want to include by using these arguments combined:
+
+-u (include uppercase)
+-l (include lowercase)
+-n (include numbers)
+-s (include special characters)
+
+If you want to generate a password with only letters, both upper and lowercase, use `-ul`. If you want to use only symbols, use `-s`. If you want every character class, use `-ulns`.
+
+The default is `-uln`.
+
 **NOTE:** This script may take a while. For 100 passwords, it takes about 1 minute. For 1000 passwords, it takes about 10 minutes.
 
 ---
